@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<?php
+?>
+<html>
+	<head>
+		<title>Tosca Server REST API</title>
+
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self' gap:; script-src 'self' data: http://localhost:55000 'unsafe-eval'; object-src *; style-src 'self' data: 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; font-src 'self' data:; connect-src *">
+		<!--meta http-equiv="Content-Security-Policy" content="default-src 'self' gap:; script-src 'self' data: http://localhost:55000/ 'unsafe-eval'; object-src *; style-src 'self' data: 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; font-src 'self' data:; connect-src *"-->
+		<!--meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline';"-->
+
+	<body>
+		<div><input type="Button" id="start" value="start"/></div>
+
+		<div><canvas id="canvas" name="canvas" width="300" height="300" aria-label="label">Canves Here!!!</canvas></div>
+
+		<script src="jquery/jquery-1.12.0.min.js"></script>
+		<script type="text/javascript" async="" src="axios/axios.min.js"></script>
+		<script type="text/javascript" async="" src="api.js"></script>
+
+	</body>
+
+</html>
