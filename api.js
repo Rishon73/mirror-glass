@@ -1,5 +1,3 @@
-
-
 $(document).ready(function(){
 
 	const TOSCA_SERVER_PROTOCOL = 'http://';
@@ -9,8 +7,8 @@ $(document).ready(function(){
 	var TOSCA_ENDPOINT = TOSCA_SERVER_PROTOCOL + TOSCA_SERVER + TOSCA_SERVER_PORT + ENDPOINT;
 
 	// Event listeners
-	$("#start").click(function(){doAPI(TOSCA_ENDPOINT + "/GetWorkspaces", "/GetWorkspaces", "", "");});
-
+	//$("#start").click(function(){doAPI(TOSCA_ENDPOINT + "/GetWorkspaces", "/GetWorkspaces", "", "");});
+	$("#start").click(function(){getWorkspaces();});
 
 /*
 	$("#lastname").change(function(){checkGetPerson();checkRating();});
@@ -21,6 +19,73 @@ $(document).ready(function(){
 	$("#numberofseatsmotorcycle").empty();
 	$("#numberofseats").empty();
 */
+
+	async function getWorkspaces() {
+		try{
+			const promise = await axios.get(TOSCA_ENDPOINT + "/GetWorkspaces")
+				.then((response) => {
+					validateResponse(response)
+					printWorkspaces(response.data);
+					//dataPromise = response.data;
+				});
+			} catch (error) {;
+						console.error(error);
+				}
+	}
+
+	async function getProjectId(getUrl) {
+		try {
+			const conf = {
+				auth: {
+					username: 'Tosca',
+					password: 'tosca'
+				},
+				headers: {
+					'Access-Control-Request-Headers': 'Content-Type',
+        	'Access-Control-Request-Method': 'GET, OPTIONS, POST',
+					'Content-Type': 'application/x-www-form-urlencoded',
+      		'Access-Control-Allow-Origin': '*'
+    		}
+			};
+
+console.log(getUrl);
+			const response = await axios.get(getUrl, conf);
+			//validateResponse(response);
+			const dataPromise = await response.data;
+			// const promise = await axios.get(url, conf)
+			// 	.then((response) => {
+			// 		validateResponse(response)
+			// 		dataPromise = response.data;
+			// });
+
+			return dataPromise;
+		} catch (error) {;
+					console.error(error);
+		}
+	}
+
+	function validateResponse(response) {
+		console.log(response);
+		console.log("response.status = " + response.status)
+		 if (response.status != 200) {
+			 throw Error(response.statusText);
+		 }
+		return response;
+	}
+
+	function printWorkspaces(list) {
+		console.log(list.length);
+		$("#canvas").text("");
+		var out = "";
+    var i;
+		$("#canvas").append(getProjectId("http://localhost:90/Rest/ToscaCommander/DEX_Workspace/projectid"));
+     for(i = 0; i < list.length; i++) {
+		// 	//getProgectID(encodeURI(TOSCA_ENDPOINT + list[i] + "\\projectid"))
+		 	$("#canvas").append("<LI>" + (TOSCA_ENDPOINT + list[i].replace("\\", ("/")) + "/projectid"));
+		// 	//$("#canvas").append('<a href="' + list[i] + '">' + list[i] + '</a><br>');
+     }
+	}
+
 
 	async function doAPI(url, task, user, pass) {
 		try {
@@ -51,13 +116,7 @@ console.log(serverResponse)
 		}
 	}
 
-	function validateResponse(response) {
-		console.log("response.status = " + response.status)
-	   if (response.status != 200) {
-	     throw Error(response.statusText);
-	   }
-	  return response;
-	}
+
 
 	function writeResults(result, uri) {
 		console.log(result.data);
@@ -73,16 +132,7 @@ console.log(serverResponse)
 		}
 	}
 
-	function writeWorkspaces(list) {
-		$("#canvas").text("");
-		var out = "";
-    var i;
-    for(i = 0; i < list.length; i++) {
-			getProgectID(encodeURI(TOSCA_ENDPOINT + list[i] + "\\projectid"))
-			//$("#canvas").append("<LI>" + TOSCA_ENDPOINT + list[i] + "\\projectid");
-			//$("#canvas").append('<a href="' + list[i] + '">' + list[i] + '</a><br>');
-    }
-	}
+
 
 	function getProgectID(url) {
 		doAPI(url, "\projectid", "Tosca", "tosca")
